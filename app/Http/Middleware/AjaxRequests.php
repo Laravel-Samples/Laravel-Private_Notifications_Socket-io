@@ -40,7 +40,8 @@ class AjaxRequests
     public function handle($request, Closure $next)
     {
         if (!$request->ajax()) {
-            return redirect()->route('login')->withErrors(['msg', 'The Message']);;
+            return redirect()->route('login')->withErrors(['', 'Invalid ajax 
+                request.']);;
         }
 
         return $next($request);
