@@ -41,31 +41,35 @@ class DashboardController extends Controller
     {
         $this->middleware('auth');
     }
-    /**
-     * Public method index - The index action
-     *
-     * @method object index The index action
-     * @return object Returns a view object
-     */
-    public function index(): object
-    {
-        return view('dashboard.home');
-    }
     
     /**
-     * Public method sendPublicMessage - Method dispatch the broadcasting event
+     * Public method transfer - The transfer action
      *
-     * @param \App\Http\Requests\HomeMessageRequest $request The request data
-     *
-     * @method string sendPublicMessage Method dispatch the broadcasting event
-     * @return string 
+     * @method object transfer The transfer action
+     * @return object 
      */
-    public function sendPublicMessage(HomeMessageRequest $request): object
+    public function transfer(): object
     {
-        auth()->user()->homeMessages()
-            ->create(['message' => $request->message]); // save the message
-            // dispatch the event 
-            PublicMessageSent::dispatch($request->message);
-            return response(request('message'), 200); // return in json format
+        return view('dashboard.transfer');
+    }
+
+    /**
+     * Public method transactions - The transactions action
+     *
+     * @method object transactions The transactions action
+     * @return object 
+     */
+    public function transactions(): object
+    {
+        /* mark all notifications as read */
+        auth()->user()->unreadNotifications->markAsRead();
+
+        $user = new \App\User();
+        $transactions = $user->getUserTransactions(
+            auth()
+                ->user()->id
+        )->paginate(5); 
+        return view('dashboard.transactions', compact('transactions'));
+        
     }
 }
