@@ -1704,7 +1704,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"react\"],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/js/dashboard/components/UpdateHomeMessage.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"react\"],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/js/dashboard/components/TransferSent.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1717,37 +1717,66 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            newMessage: '',
-            feedbackBox: '',
-            feedbackRes: '',
-            inputRes: ''
+            amount: '',
+            receiver: ''
         };
+    },
+    created: function created() {// called after the component is created
     },
 
     methods: {
-        save: function save() {
-            if (this.newMessage.length) {
-                axios.post('/ajax/send-message/', { message: this.newMessage }).catch(function (error) {
-                    return error.response;
-                }).then(this.setResponse);
-
-                this.newMessage = '';
-            }
+        sendTransfer: function sendTransfer() {
+            axios.post('/ajax/process-transfer', {
+                username: this.receiver,
+                amount: this.amount
+            }).catch(function (error) {
+                return error.response;
+            }).then(this.setResponse);
         },
         setResponse: function setResponse(response) {
-            if (response.status != 200) {
-                this.feedbackRes = "invalid-feedback";
-                this.inputRes = "is-invalid";
-                this.feedbackBox = response.data.errors.message[0];
+            $("#errors").addClass('d-none');
+            $("#success").addClass('d-none');
+            if (response.status != 200 && response.data.errors) {
+                this.setErrors(response.data.errors);
             } else {
-                this.feedbackRes = "";
-                this.inputRes = "";
-                this.feedbackBox = "Your message was sent!";
+                $("#success").empty();
+                $("#userAmount").html(response.data.emitter_amount.toString());
+                $("#success").append("The transfer was successful").removeClass('d-none');
             }
+        },
+        setErrors: function setErrors(errors) {
+            $("#errors").removeClass('d-none');
+            $("#errorList").empty();
+            $.each(errors, function (key, val) {
+                $("#errorList").append("<li>" + val + "</li>");
+            });
         }
     }
 });
@@ -8327,7 +8356,7 @@ function load() {
 
   // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
   if (!r && typeof process !== 'undefined' && 'env' in process) {
-    r = Object({"MIX_PUSHER_APP_KEY":"","MIX_PUSHER_APP_CLUSTER":"","NODE_ENV":"development"}).DEBUG;
+    r = Object({"MIX_PUSHER_APP_KEY":"","MIX_PUSHER_APP_CLUSTER":"mt1","NODE_ENV":"development"}).DEBUG;
   }
 
   return r;
@@ -45629,7 +45658,7 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3fe23bdf\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/js/dashboard/components/UpdateHomeMessage.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4c062f13\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/js/dashboard/components/TransferSent.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45637,61 +45666,117 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("input", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.newMessage,
-          expression: "newMessage"
-        }
-      ],
-      staticClass: "form-control",
-      class: _vm.inputRes,
-      attrs: { type: "text", autofocus: "" },
-      domProps: { value: _vm.newMessage },
-      on: {
-        keydown: function($event) {
-          if (
-            !("button" in $event) &&
-            _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-          ) {
-            return null
+    _c("div", { staticClass: "form-row" }, [
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("label", { attrs: { for: "transfer-username" } }, [
+          _vm._v("Username")
+        ]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.receiver,
+              expression: "receiver"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: {
+            type: "text",
+            name: "username",
+            placeholder: "Username",
+            autofocus: "",
+            id: "transfer-username"
+          },
+          domProps: { value: _vm.receiver },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.receiver = $event.target.value
+            }
           }
-          return _vm.save($event)
-        },
-        input: function($event) {
-          if ($event.target.composing) {
-            return
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("label", { attrs: { for: "transfer-amount" } }, [_vm._v("Amount:")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.amount,
+              expression: "amount"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: {
+            type: "number",
+            name: "amount",
+            step: "0.01",
+            min: "0.01",
+            placeholder: "0.01",
+            id: "transfer-amount"
+          },
+          domProps: { value: _vm.amount },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.amount = $event.target.value
+            }
           }
-          _vm.newMessage = $event.target.value
-        }
-      }
-    }),
+        })
+      ])
+    ]),
+    _vm._v(" "),
+    _c("hr"),
+    _vm._v(" "),
+    _vm._m(0),
     _vm._v(" "),
     _c("div", {
-      class: _vm.feedbackRes,
-      domProps: { innerHTML: _vm._s(_vm.feedbackBox) }
+      staticClass: "alert alert-success d-none",
+      attrs: { id: "success" }
     }),
     _vm._v(" "),
     _c(
       "button",
       {
-        staticClass: "btn btn-primary mt-4",
+        staticClass: "btn btn-primary",
         attrs: { type: "button" },
-        on: { click: _vm.save }
+        on: { click: _vm.sendTransfer }
       },
-      [_vm._v("Go!")]
+      [_c("strong", [_vm._v("Send!")])]
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "form-group d-none", attrs: { id: "errors" } },
+      [
+        _c("div", { staticClass: "alert alert-danger" }, [
+          _c("ul", { attrs: { id: "errorList" } })
+        ])
+      ]
+    )
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-3fe23bdf", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-4c062f13", module.exports)
   }
 }
 
@@ -56864,7 +56949,6 @@ window.Echo = new __WEBPACK_IMPORTED_MODULE_0_laravel_echo___default.a({
 /***/ "./resources/js/dashboard/app.js":
 /***/ (function(module, exports, __webpack_require__) {
 
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -56880,23 +56964,49 @@ window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-Vue.component('home-message-block', __webpack_require__("./resources/js/dashboard/components/UpdateHomeMessage.vue"));
+Vue.component('transfer-block', __webpack_require__("./resources/js/dashboard/components/TransferSent.vue"));
 
 var app = new Vue({
-  el: '#app'
+    el: '#app',
+    data: {
+        userId: $('#user-id').val()
+    },
+    created: function created() {
+        var _this = this;
+
+        window.Echo.private('transfer-sent.' + this.userId).notification(function (response) {
+            _this.setUpModal('Trasfer received!');
+            _this.incUnreadNotifs();
+            $("#layoutModalBody").html("You received a transfer!");
+            $("#userAmount").html(response.receiver_amount);
+        });
+    },
+
+    methods: {
+        setUpModal: function setUpModal(title) {
+            $("#layoutModalTitle").empty();
+            $("#layoutModalTitle").html(title);
+            $("#layoutModalBody").empty();
+            $("#layoutModal").modal("show");
+        },
+        incUnreadNotifs: function incUnreadNotifs() {
+            var unread = parseInt($("#unread_notifs").html());
+            $("#unread_notifs").html(unread + 1);
+        }
+    }
 });
 
 /***/ }),
 
-/***/ "./resources/js/dashboard/components/UpdateHomeMessage.vue":
+/***/ "./resources/js/dashboard/components/TransferSent.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"react\"],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/js/dashboard/components/UpdateHomeMessage.vue")
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"react\"],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/js/dashboard/components/TransferSent.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3fe23bdf\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/js/dashboard/components/UpdateHomeMessage.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4c062f13\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/js/dashboard/components/TransferSent.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -56913,7 +57023,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/js/dashboard/components/UpdateHomeMessage.vue"
+Component.options.__file = "resources/js/dashboard/components/TransferSent.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -56922,9 +57032,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3fe23bdf", Component.options)
+    hotAPI.createRecord("data-v-4c062f13", Component.options)
   } else {
-    hotAPI.reload("data-v-3fe23bdf", Component.options)
+    hotAPI.reload("data-v-4c062f13", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
