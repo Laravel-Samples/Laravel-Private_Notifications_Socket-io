@@ -15,8 +15,6 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('public-message', require('./components/PublicMessage.vue'));
-
 const app = new Vue({
     el: '#app'
 });

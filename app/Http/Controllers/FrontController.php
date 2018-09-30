@@ -38,7 +38,7 @@ class FrontController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('guest');
+        $this->middleware('guest');
     }
 
     /**
@@ -49,11 +49,7 @@ class FrontController extends Controller
      */
     public function index(): object
     {
-        /* The only way I found to send only the message to vue */
-        $homeMessage = \App\HomeMessage::latest()->first();
-        $message = ($homeMessage)? 
-            $homeMessage->message : Inspiring::quote();
-        $message = json_encode(['message'=> $message]);
+        $message = Inspiring::quote(); // get a Laravel's inspiring quote
 
         return view('front.home', compact('message'));
     }
