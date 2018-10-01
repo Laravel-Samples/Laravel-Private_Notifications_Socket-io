@@ -18,4 +18,5 @@ Route::get('/', 'FrontController@index')->name('home');
 Route::get('/logout','Auth\LoginController@logout'); // adding a get route to the logout - mouse hater...
 Auth::routes();
 
-Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+Route::get('/dashboard', 'DashboardController@transfer')->name('transfer');
+Route::get('/transactions', 'DashboardController@transactions')->name('transactions');
