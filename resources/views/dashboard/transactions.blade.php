@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mt-5">
-                <div class="card-header">                    
+                <div class="card-header">
                     <h3>
                         Transactions
                         <i class="fas fa-exchange-alt"></i>
@@ -32,11 +32,12 @@
                             @endforeach
                         </tbody>
                     </table>
-                 {{ $transactions->links() }} 
+                 {{ $transactions->links() }}
                 </div>
             </div>
 
         </div>
     </div>
+    <bell-refresh></bell-refresh>
 </div>
 @endsection
