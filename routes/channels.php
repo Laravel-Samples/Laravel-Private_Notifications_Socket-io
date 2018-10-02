@@ -11,4 +11,4 @@
 |
 */
 
-Broadcast::channel('transfer-sent.{receiver}', App\Broadcasting\TransferReceivedChannel::class);
+Broadcast::channel('user.{receiver}', App\Broadcasting\TransferReceivedChannel::class);
