@@ -34,7 +34,7 @@ On your .env file replace fill with your environment data:
 BROADCAST_DRIVER=redis
 
 REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=null # if you have configured a password 
+REDIS_PASSWORD=null 
 REDIS_PORT=6379
 
 DB_DATABASE=
