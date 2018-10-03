@@ -1,6 +1,6 @@
 # Laravel 5.7 - Private real-Time notifications with Socket.io and Redis 
 
-The app simulates a cryptocurrency exchanging platform and uses Laravel's Notification to store in database new notifications as well as broadcast it. The system has a real time resource that notifies a user in real-time about new transfers.
+The app simulates a cryptocurrency exchanging platform and uses Laravel Notifications classes to notifies a user in real-time about new transfers.
 
 ### Installation
 
