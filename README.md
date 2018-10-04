@@ -1,21 +1,6 @@
 # Laravel 5.7 - Private real-Time notifications with Socket.io and Redis 
 
-This app works along with [Socket.io], [Redis], [Predis], [Laravel Notifications], [Laravel Events], [Laravel Listeners], [Laravel Channels], [Laravel Form Requests], [Laravel Middleware], [Laravel Echo], [Laravel Validation Rules] class and etc.
-
-In addition to the repository [Laravel-Real-time_Socket-io], this app implements private notifications using the Notification resourse of Laravel. 
-
-The app simulates a cryptocurrency exchanging platform and uses Laravel's Notification to store in database new notifications as well as broadcast it. The system has a real time resource that shows in real time the total amount a user have, a facebook like notifications menu that increase while the user receives new transfers as well as a modal message to alert about new transfers. The app makes use of Laravel events, listeners, channels and notifications to implement the real-time notification as well as the control of unread notifications.
-
-### How it works:
-
-Once you register a user in the platform, the user receives 15 in cryptocurrency that can be transfered to other registered users, the app has validations for the transfer form that checks the existence of the other user as well as if the total transfer amount is available in the emitter's account.
-
-### The customization of the User Registration includes:
-
-- replaced 'name' to 'username'
-- added a Request Class to deal with the user registration form validation and error message
-- adding a get route to the logout
-- segregating layout and public files in 'front' and 'dashboard'
+The app simulates a cryptocurrency exchanging platform and uses Laravel Notifications classes to notifies a user in real-time about new transfers.
 
 ### Installation
 
