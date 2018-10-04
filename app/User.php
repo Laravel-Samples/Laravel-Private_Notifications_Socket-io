@@ -87,13 +87,14 @@ class User extends Authenticatable
      * Public method getUserReceivings - Retrieves all receivings the a user id
      *
      * @param integer $userId The user id
-     *
+     * @param integer $limit  The results limit
+     * 
      * @method object getUserReceivings Retrieves all receivings the a user id
      * @return object
      */
-    public function getUserReceivings(int $userId): object
+    public function getUserReceivings(int $userId, int $limit = null): object
     {
-        return \DB::table('users as u')
+        $query = \DB::table('users as u')
             ->select(
                 'u.username as receiver',
                 't.amount',
@@ -104,7 +105,15 @@ class User extends Authenticatable
             ->leftJoin('user_transfers as ut', 't.id', '=', 'ut.transfer_id')
             ->leftJoin('users as tu', 'tu.id', '=', 'ut.user_id')
             ->where('u.id', $userId)
-            ->where('ut.id', '!=', 'NULL');
+            /* the engine creates an aditional value, this where condition was 
+             * inserted to avoid this
+             */ 
+            ->where('ut.id', '!=', 'NULL'); 
+        if ($limit) {
+            $query->limit($limit);
+        }
+        
+        return $query;
     }
 
     /**

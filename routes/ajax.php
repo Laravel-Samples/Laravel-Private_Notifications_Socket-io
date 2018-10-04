@@ -16,3 +16,4 @@
 
 /* dispatch transfer */
 Route::post('/process-transfer', 'TransferController@processTransfer');
+Route::get('/dropdown-notifs', 'TransferController@getDropDownNotifications');

@@ -97,4 +97,21 @@ class TransferController extends Controller
 
         return $transfer;
     }
+
+    /**
+     * Public method getDropDownNotifications - Get the last 10 notifications
+     *
+     * @method object getDropDownNotifications Get the last 10 notifications
+     * @return object 
+     */
+    public function getDropDownNotifications(): object
+    {
+        /* mark all notifications as read */
+        auth()->user()->unreadNotifications->markAsRead();
+        
+        $user = new User();
+        $res = $user->getUserReceivings(auth()->user()->id)
+            ->orderBy('created_at','desc')->limit(10)->get();
+        return response()->json($res); 
+    }
 }

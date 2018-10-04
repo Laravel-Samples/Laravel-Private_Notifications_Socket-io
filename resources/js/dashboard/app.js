@@ -41,6 +41,21 @@ const app = new Vue({
         incUnreadNotifs() {
             let unread = parseInt($("#unread_notifs").html());
             $("#unread_notifs").html(unread + 1);
+        },
+        transactionsClick() {
+            $("#unread_notifs").html(0);
+            $.ajax({
+                url: "/ajax/dropdown-notifs",
+                method: "GET"
+            }).done(function(data){
+                $("#dropd_transactions").find('a.transaction-item').remove();
+                data.reverse().forEach(function(elm){
+                    $("#dropd_transactions").prepend('<a class="dropdown-item transaction-item" href="/transactions">'+elm.emitter+' '+elm.amount+' '+elm.created_at+'</a>');
+                });
+               console.log(data);         
+            });
         }
     }
 });
+
+

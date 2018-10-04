@@ -13,11 +13,15 @@
          <!-- Right Side Of Navbar -->
          <ul class="navbar-nav ml-auto">
             <!-- Authentication Links -->
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('transactions') }}">
+            <li class="nav-item dropdown" >
+               <a id="navbarDropdown2" class="nav-link dropdown-toggle" @click="transactionsClick" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                    <i class="fas fa-bell notifications-icon"></i>
                    <span class="badge badge-primary badge-pill" id="unread_notifs">{{ count(auth()->user()->unreadNotifications) }}</span>
                 </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown1" id="dropd_transactions">
+                   <div class="dropdown-divider"></div>
+                   <a class="dropdown-item" href="{{ route('transactions') }}">See all transactions</a>
+                </div>
             </li>
             <li class="nav-item dropdown">
                <a id="navbarDropdown2" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
