@@ -57044,7 +57044,6 @@ var app = new Vue({
                 data.reverse().forEach(function (elm) {
                     $("#dropd_transactions").prepend('<a class="dropdown-item transaction-item" href="/transactions">' + elm.emitter + ' ' + elm.amount + ' ' + elm.created_at + '</a>');
                 });
-                console.log(data);
             });
         }
     }
